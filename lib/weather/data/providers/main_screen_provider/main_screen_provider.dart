@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:portfoliome/core/api/api.dart';
 import 'package:portfoliome/weather/data/endpoints.dart';
 import 'package:portfoliome/weather/data/app_provider.dart';
+import 'package:portfoliome/weather/data/json_models/astronomy_response.dart';
 import 'package:portfoliome/weather/data/json_models/realtime_weather_response.dart';
 
 class MainScreenProvider extends AppProvider {
@@ -37,6 +38,21 @@ class MainScreenProvider extends AppProvider {
     final locationData = await _geolocator.getCurrentPosition();
     final placemarks = await _geocoding.placemarkFromCoordinates(locationData.latitude, locationData.longitude);
     return placemarks.first;
+  }
+
+  Future<AstronomyResponse> getAstronomy(String? query) async {
+    final route = Uri.https(AppEndpoints.host, AppEndpoints.astronomy, {'q': query ?? ''});
+    final response = await api.request(
+      route: route,
+      method: Method.get,
+    );
+
+    return AstronomyResponse(
+      statusCode: response.statusCode,
+      isSuccess: response.isSuccess,
+      parsedJson: response.isSuccess ? await compute(_parseRealtimeWeather, response.response?.body) : null,
+      error: response.isSuccess ? null : response.error,
+    );
   }
 
   Map<String, dynamic>? _parseRealtimeWeather(String? body) {

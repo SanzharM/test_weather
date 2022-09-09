@@ -8,6 +8,7 @@ class RealtimeWeather {
   final double? feelsLikeC;
   final double? feelsLikeF;
   final LocationData? locationData;
+  final String? condition;
 
   const RealtimeWeather({
     this.tempC,
@@ -15,6 +16,7 @@ class RealtimeWeather {
     this.feelsLikeC,
     this.feelsLikeF,
     this.locationData,
+    this.condition,
   });
 
   RealtimeWeather copyWith({
@@ -23,6 +25,7 @@ class RealtimeWeather {
     double? feelsLikeC,
     double? feelsLikeF,
     LocationData? locationData,
+    String? condition,
   }) {
     return RealtimeWeather(
       tempC: tempC ?? this.tempC,
@@ -30,6 +33,7 @@ class RealtimeWeather {
       feelsLikeC: feelsLikeC ?? this.feelsLikeC,
       feelsLikeF: feelsLikeF ?? this.feelsLikeF,
       locationData: locationData ?? this.locationData,
+      condition: condition ?? this.condition,
     );
   }
 
@@ -51,6 +55,9 @@ class RealtimeWeather {
     if (locationData != null) {
       result.addAll({'locationData': locationData!.toMap()});
     }
+    if (condition != null) {
+      result.addAll({'condition': condition});
+    }
 
     return result;
   }
@@ -62,6 +69,7 @@ class RealtimeWeather {
       feelsLikeC: map['current']['feelslike_c']?.toDouble(),
       feelsLikeF: map['current']['feelslike_f']?.toDouble(),
       locationData: map['locationData'] != null ? LocationData.fromMap(map['location']) : null,
+      condition: map['current']['condition']['text'],
     );
   }
 
@@ -71,7 +79,7 @@ class RealtimeWeather {
 
   @override
   String toString() {
-    return 'RealtimeWeather(tempC: $tempC, tempF: $tempF, feelsLikeC: $feelsLikeC, feelsLikeF: $feelsLikeF, locationData: $locationData)';
+    return 'RealtimeWeather(tempC: $tempC, tempF: $tempF, feelsLikeC: $feelsLikeC, feelsLikeF: $feelsLikeF, locationData: $locationData, condition: $condition)';
   }
 
   @override
@@ -83,11 +91,12 @@ class RealtimeWeather {
         other.tempF == tempF &&
         other.feelsLikeC == feelsLikeC &&
         other.feelsLikeF == feelsLikeF &&
-        other.locationData == locationData;
+        other.locationData == locationData &&
+        other.condition == condition;
   }
 
   @override
   int get hashCode {
-    return tempC.hashCode ^ tempF.hashCode ^ feelsLikeC.hashCode ^ feelsLikeF.hashCode ^ locationData.hashCode;
+    return tempC.hashCode ^ tempF.hashCode ^ feelsLikeC.hashCode ^ feelsLikeF.hashCode ^ locationData.hashCode ^ condition.hashCode;
   }
 }
