@@ -28,3 +28,16 @@ class AstronomyError extends MainScreenState {
   final String error;
   AstronomyError(this.error);
 }
+
+class MainScreenDataLoaded extends MainScreenState {
+  final RealtimeWeather weather;
+  final Astronomy astronomy;
+  MainScreenDataLoaded({required this.weather, required this.astronomy});
+}
+
+class MainScreenDataLoading extends MainScreenState {}
+
+class MainScreenDataError extends MainScreenState {
+  final String error;
+  MainScreenDataError(this.error);
+}

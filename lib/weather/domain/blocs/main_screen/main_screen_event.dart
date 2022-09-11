@@ -6,3 +6,5 @@ abstract class MainScreenEvent {}
 class GetRealtimeWeatherEvent extends MainScreenEvent {}
 
 class GetAstronomyEvent extends MainScreenEvent {}
+
+class GetMainScreenDataEvent extends MainScreenEvent {}

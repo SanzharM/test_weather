@@ -19,4 +19,8 @@ class Utils {
     }
     return null;
   }
+
+  static String toTemperature(dynamic value) {
+    return '${value ?? '--'}°';
+  }
 }

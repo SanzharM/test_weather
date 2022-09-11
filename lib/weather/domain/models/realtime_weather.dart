@@ -9,6 +9,10 @@ class RealtimeWeather {
   final double? feelsLikeF;
   final LocationData? locationData;
   final String? condition;
+  final double? windKph;
+  final double? pressureMb;
+  final double? humidity;
+  final double? visibilityKm;
 
   const RealtimeWeather({
     this.tempC,
@@ -17,6 +21,10 @@ class RealtimeWeather {
     this.feelsLikeF,
     this.locationData,
     this.condition,
+    this.windKph,
+    this.pressureMb,
+    this.humidity,
+    this.visibilityKm,
   });
 
   RealtimeWeather copyWith({
@@ -26,6 +34,10 @@ class RealtimeWeather {
     double? feelsLikeF,
     LocationData? locationData,
     String? condition,
+    double? windKph,
+    double? pressureMb,
+    double? humidity,
+    double? visibilityKm,
   }) {
     return RealtimeWeather(
       tempC: tempC ?? this.tempC,
@@ -34,6 +46,10 @@ class RealtimeWeather {
       feelsLikeF: feelsLikeF ?? this.feelsLikeF,
       locationData: locationData ?? this.locationData,
       condition: condition ?? this.condition,
+      windKph: windKph ?? this.windKph,
+      pressureMb: pressureMb ?? this.pressureMb,
+      humidity: humidity ?? this.humidity,
+      visibilityKm: visibilityKm ?? this.visibilityKm,
     );
   }
 
@@ -58,6 +74,18 @@ class RealtimeWeather {
     if (condition != null) {
       result.addAll({'condition': condition});
     }
+    if (windKph != null) {
+      result.addAll({'windKph': windKph});
+    }
+    if (pressureMb != null) {
+      result.addAll({'pressureMb': pressureMb});
+    }
+    if (humidity != null) {
+      result.addAll({'humidity': humidity});
+    }
+    if (visibilityKm != null) {
+      result.addAll({'visibilityKm': visibilityKm});
+    }
 
     return result;
   }
@@ -70,6 +98,10 @@ class RealtimeWeather {
       feelsLikeF: map['current']['feelslike_f']?.toDouble(),
       locationData: map['locationData'] != null ? LocationData.fromMap(map['location']) : null,
       condition: map['current']['condition']['text'],
+      windKph: map['current']['wind_kph']?.toDouble(),
+      pressureMb: map['current']['pressure_mb']?.toDouble(),
+      humidity: map['current']['humidity']?.toDouble(),
+      visibilityKm: map['current']['vis_km']?.toDouble(),
     );
   }
 
@@ -79,7 +111,7 @@ class RealtimeWeather {
 
   @override
   String toString() {
-    return 'RealtimeWeather(tempC: $tempC, tempF: $tempF, feelsLikeC: $feelsLikeC, feelsLikeF: $feelsLikeF, locationData: $locationData, condition: $condition)';
+    return 'RealtimeWeather(tempC: $tempC, tempF: $tempF, feelsLikeC: $feelsLikeC, feelsLikeF: $feelsLikeF, locationData: $locationData, condition: $condition, windKph: $windKph, pressureMb: $pressureMb, humidity: $humidity, visibilityKm: $visibilityKm)';
   }
 
   @override
@@ -92,11 +124,24 @@ class RealtimeWeather {
         other.feelsLikeC == feelsLikeC &&
         other.feelsLikeF == feelsLikeF &&
         other.locationData == locationData &&
-        other.condition == condition;
+        other.condition == condition &&
+        other.windKph == windKph &&
+        other.pressureMb == pressureMb &&
+        other.humidity == humidity &&
+        other.visibilityKm == visibilityKm;
   }
 
   @override
   int get hashCode {
-    return tempC.hashCode ^ tempF.hashCode ^ feelsLikeC.hashCode ^ feelsLikeF.hashCode ^ locationData.hashCode ^ condition.hashCode;
+    return tempC.hashCode ^
+        tempF.hashCode ^
+        feelsLikeC.hashCode ^
+        feelsLikeF.hashCode ^
+        locationData.hashCode ^
+        condition.hashCode ^
+        windKph.hashCode ^
+        pressureMb.hashCode ^
+        humidity.hashCode ^
+        visibilityKm.hashCode;
   }
 }

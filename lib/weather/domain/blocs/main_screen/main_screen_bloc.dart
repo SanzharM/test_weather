@@ -12,10 +12,12 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
 
   void getRealtimeWeather() => add(GetRealtimeWeatherEvent());
   void getAstronomy() => add(GetAstronomyEvent());
+  void getData() => add(GetMainScreenDataEvent());
 
   MainScreenBloc() : super(MainScreenInitial()) {
     on<GetRealtimeWeatherEvent>(_getRealtimeWeather);
     on<GetAstronomyEvent>(_getAstronomy);
+    on<GetMainScreenDataEvent>(_getMainScreenData);
   }
 
   void _getRealtimeWeather(MainScreenEvent event, Emitter<MainScreenState> emit) async {
@@ -40,7 +42,7 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     emit(AstronomyLoading());
     try {
       final location = await _provider.tryGetLocation();
-      final response = await _provider.getAstronomy(location?.country);
+      final response = await _provider.getAstronomy(location?.locality);
 
       if (response.isSuccess) {
         emit(AstronomyLoaded(Astronomy.fromMap(response.parsedJson!)));
@@ -51,6 +53,30 @@ class MainScreenBloc extends Bloc<MainScreenEvent, MainScreenState> {
     } catch (e) {
       debugPrint('Astronomy in MainBloc: $e');
       emit(AstronomyError('Something went wrong'));
+    }
+  }
+
+  void _getMainScreenData(MainScreenEvent event, Emitter<MainScreenState> emit) async {
+    emit(MainScreenDataLoading());
+    try {
+      final location = await _provider.tryGetLocation();
+      final weatherResponse = await _provider.getRealtimeWeather(location?.locality);
+      final astronomyResponse = await _provider.getAstronomy(location?.locality);
+
+      if (weatherResponse.isSuccess && astronomyResponse.isSuccess) {
+        emit(
+          MainScreenDataLoaded(
+            weather: RealtimeWeather.fromMap(weatherResponse.parsedJson!),
+            astronomy: Astronomy.fromMap(astronomyResponse.parsedJson!),
+          ),
+        );
+        return;
+      }
+      emit(MainScreenDataError(weatherResponse.error ?? astronomyResponse.error ?? 'Something went wrong'));
+      return;
+    } catch (e) {
+      debugPrint('GetMainScreenData error: $e');
+      emit(MainScreenDataError('Something went wrong'));
     }
   }
 }
